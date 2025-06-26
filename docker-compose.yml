@@ -1,22 +1,26 @@
-# Arquivo de configuração do Docker Compose para o projeto QA FIESC
+version: '3.8'
+
 services:
   backend:
     build: ./backend
     ports:
       - "3000:3000"
     volumes:
-      - ./backend:/app
+      - ./backend/src:/app/src  # Apenas o código fonte para desenvolvimento
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       - DB_HOST=db
       - DB_PORT=5432
       - DB_USER=postgres
       - DB_PASSWORD=postgres
       - DB_NAME=qa_fiesc
+      - PORT=3000
+    restart: unless-stopped
 
   db:
-    image: postgres
+    image: postgres:17
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -27,6 +31,11 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./backend/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:
