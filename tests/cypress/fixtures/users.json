@@ -1,0 +1,13 @@
+{
+  "admin": {
+    "email": "admin@cafeteria.com",
+    "password": "admin123"
+  },
+  "newUser": {
+    "name": "Novo Usuário",
+    "email": "novo.usuario@teste.com",
+    "password": "senha123"
+  }
+}
+
+

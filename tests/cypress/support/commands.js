@@ -1,29 +1,24 @@
-Cypress.Commands.add('loginViaAPI', () => {
-  const email = `e2e_${Date.now()}@teste.com`;
-  const senha = 'Senha123';
-  const nome = 'E2E Teste';
-
-  cy.request('POST', '/api/auth/registrar', { nome, email, senha }).then(() => {
-    cy.request('POST', '/api/auth/login', { email, senha }).then((res) => {
-      window.localStorage.setItem('token', res.body.token);
-      window.localStorage.setItem('nomeUsuario', res.body.usuario.nome);
-    });
+Cypress.Commands.add("login", (email, password) => {
+  cy.session([email, password], () => {
+    cy.visit("/login.html");
+    cy.get("#email").type(email);
+    cy.get("#senha").type(password);
+    cy.get("form").submit();
+    cy.url().should("include", "pedido.html");
   });
 });
 
-Cypress.Commands.add('logout', () => {
+Cypress.Commands.add("register", (name, email, password) => {
+  cy.visit("/registro.html");
+  cy.get("#nome").type(name);
+  cy.get("#email").type(email);
+  cy.get("#senha").type(password);
+  cy.get("form").submit();
+});
+
+Cypress.Commands.add("clearAndVisit", (url) => {
   cy.clearLocalStorage();
-  cy.visit('/login.html');
+  cy.visit(url);
 });
 
-Cypress.Commands.add('criarPedidoAPI', (token, ingredientes) => {
-  cy.request({
-    method: 'POST',
-    url: '/api/pedidos',
-    headers: { Authorization: `Bearer ${token}` },
-    body: {
-      nome: 'Pedido Cypress',
-      ingredientes
-    }
-  });
-});
+
