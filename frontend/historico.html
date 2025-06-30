@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Histórico - Cafeteria</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="pedido-body">
+  <div class="pedido-wrapper">
+    <div class="pedido-container">
+      <div class="cabecalho-pedido">
+        <div class="usuario-opcoes">
+          <span class="usuario-logado" id="usuarioNome"></span>
+          <a href="pedido.html" class="link-topo">Novo Pedido</a>
+          <a href="#" id="logout" class="link-topo">Sair</a>
+        </div>
+      </div>
+
+      <h1>Histórico de Pedidos ☕</h1>
+      <div id="listaPedidos" class="historico-pedidos"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/pages/historico.js"></script>
+</body>
+</html>

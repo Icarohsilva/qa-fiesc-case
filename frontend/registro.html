@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro - Cafeteria</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="login-body">
+
+  <div class="login-container">
+    <h1>Cadastre-se ☕</h1>
+
+    <form id="registroForm" novalidate>
+      <input type="text" id="nome" placeholder="Nome completo" required />
+      <input type="email" id="email" placeholder="Email" required autocomplete="email" />
+      <input type="password" id="senha" placeholder="Senha" required autocomplete="new-password" />
+      <button type="submit">Registrar</button>
+    </form>
+
+    <p class="link">
+      Já tem conta? <a href="login.html">Entrar</a>
+    </p>
+
+    <div id="mensagemErro" class="erro" aria-live="polite"></div>
+  </div>
+
+  <!-- Toast de sucesso -->
+  <div id="toast" data-testid="toast-sucesso" class="overlay-sucesso" style="display: none;">
+    <div class="sucesso-box">
+      <span class="emoji">✅</span>
+      <p id="toast-text">Cadastro realizado com sucesso!</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <script type="module" src="js/auth/registro.js"></script>
+</body>
+</html>

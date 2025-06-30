@@ -1,0 +1,51 @@
+# === Dependências ===
+**/node_modules/
+**/.pnp
+.pnp.js
+
+# === Ambiente ===
+**/.env
+**/.env.local
+**/.env.development
+**/.env.test
+**/.env.production
+
+# === Logs ===
+**/*.log
+**/logs
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# === Sistemas operacionais ===
+**/.DS_Store
+**/Thumbs.db
+
+# === IDEs ===
+**/.idea
+**/.vscode
+**/*.suo
+**/*.ntvs*
+**/*.njsproj
+**/*.sln
+**/*.sw?
+
+# === Backend (Node.js/Prisma) ===
+backend/.env
+!backend/prisma/migrations/
+!backend/prisma/migrations/**/*
+
+# === Frontend (React/Vite) ===
+frontend/dist/
+frontend/.env
+frontend/.cache/
+frontend/coverage/
+
+# === Testes ===
+tests/cypress/videos/
+tests/cypress/screenshots/
+tests/jest/coverage/
+
+# === Docker ===
+**/.dockerignore
+**/docker-compose.override.yml

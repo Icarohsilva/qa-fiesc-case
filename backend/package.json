@@ -1,0 +1,41 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "seed": "node --experimental-json-modules prisma/seed.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --config=jest.config.mjs",
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "test:api": "newman run \"tests/api/Sistema de Cafeteria.postman_collection.json\" -e \"tests/api/Cafeteria Environment.postman_environment.json\"",
+    "poststart": "npm run test:api",
+    "test:ci": "npm run test && npm run test:api"
+  },
+  "prisma": {
+    "seed": "node --experimental-json-modules prisma/seed.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^6.10.1",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.0",
+    "express": "^5.1.0",
+    "express-validator": "^7.2.1",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "description": "",
+  "devDependencies": {
+    "@babel/core": "^7.27.7",
+    "@babel/preset-env": "^7.27.2",
+    "babel-jest": "^30.0.2",
+    "dotenv-cli": "^8.0.0",
+    "jest": "^30.0.3",
+    "newman": "^6.2.1",
+    "prisma": "^6.10.1",
+    "supertest": "^7.1.1"
+  }
+}

@@ -1,0 +1,557 @@
+{
+	"info": {
+		"_postman_id": "b5d623f3-dbb0-45c0-bdc4-efc64e76bcde",
+		"name": "Sistema de Cafeteria",
+		"description": "Coleção de testes automatizados para o sistema de cafeteria.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38539753"
+	},
+	"item": [
+		{
+			"name": "Registrar novo usuário",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Usuário registrado com sucesso\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Captura email e token",
+							"const json = pm.response.json();",
+							"pm.environment.set(\"token\", json.token);",
+							"pm.environment.set(\"usuarioEmail\", json.usuario.email);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Gera um número aleatório entre 1000 e 999999\r",
+							"const rand = Math.floor(Math.random() * 1000000);\r",
+							"pm.environment.set(\"randomInt\", rand);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nome\": \"Teste\",\n  \"email\": \"teste_{{randomInt}}@example.com\",\n  \"senha\": \"senhaSegura@123\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/registrar",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"registrar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fazer login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login realizado com sucesso\", () => {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"const json = pm.response.json();",
+							"pm.environment.set(\"token\", json.token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"{{usuarioEmail}}\",\n  \"senha\": \"senhaSegura@123\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista de ingredientes",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status da resposta é 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Tempo de resposta é menor que 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Esquema da resposta contém campos obrigatórios\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+							"    responseData.forEach(item => {\r",
+							"        pm.expect(item).to.have.all.keys('id', 'nome', 'tipo', 'valor', 'disponivel', 'criadoEm');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Disponivel é um valor booleano\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    responseData.forEach(function(item) {\r",
+							"        pm.expect(item.disponivel).to.be.a('boolean');\r",
+							"    });\r",
+							"});\r",
+							";"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/ingredientes",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"ingredientes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lista ingredientes disponíveis",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status da resposta é 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Tempo de resposta é menor que 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Resposta é um array e contém campos obrigatórios\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+							"    \r",
+							"    responseData.forEach(item => {\r",
+							"        pm.expect(item).to.be.an('object');\r",
+							"        pm.expect(item).to.have.all.keys('id', 'nome', 'tipo', 'valor');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar que 'id' é um inteiro não negativo\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+							"    responseData.forEach(item => {\r",
+							"        pm.expect(item.id).to.be.a('number').that.is.at.least(0);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validar que 'nome' é uma string não vazia e 'valor' é um número não negativo\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+							"\r",
+							"    responseData.forEach(item => {\r",
+							"        pm.expect(item.nome).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"O valor não deve estar vazio\");\r",
+							"        pm.expect(item.valor).to.exist.and.to.be.a('number').and.to.be.at.least(0, \"O valor deve ser não negativo\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/ingredientes/disponiveis",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"ingredientes",
+						"disponiveis"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Identificar tipo de café",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Função para gerar números únicos aleatórios\r",
+							"function getRandomUniqueNumbers(min, max, count) {\r",
+							"  const nums = [];\r",
+							"  while (nums.length < count) {\r",
+							"    const n = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+							"    if (!nums.includes(n)) nums.push(n);\r",
+							"  }\r",
+							"  return nums;\r",
+							"}\r",
+							"\r",
+							"// Gerar até 2 ingredientes base (IDs entre 1 e 5)\r",
+							"const ingredientesBase = getRandomUniqueNumbers(1, 5, Math.floor(Math.random() * 2) + 2);\r",
+							"pm.environment.set(\"ingredientesIds\", JSON.stringify(ingredientesBase));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"O status da resposta é 200\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"O tempo de resposta é menor que 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"A resposta possui os campos obrigatórios: nome, descricao e tipo\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.all.keys('nome', 'descricao', 'tipo');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Os campos nome, descricao e tipo devem ser strings não vazias\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    [responseData.nome, responseData.descricao, responseData.tipo].forEach(function(field) {\r",
+							"        pm.expect(field).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"O valor não deve estar vazio\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"A resposta segue o formato esperado do schema JSON\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.all.keys('nome', 'descricao', 'tipo');\r",
+							"    \r",
+							"    pm.expect(responseData.nome).to.be.a('string');\r",
+							"    pm.expect(responseData.descricao).to.be.a('string');\r",
+							"    pm.expect(responseData.tipo).to.be.a('string');\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ingredientesIds\": {{ingredientesIds}}\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/cafes/identificar",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"cafes",
+						"identificar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Criar pedido",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"function getRandomUniqueNumbers(min, max, count) {\r",
+							"  const nums = [];\r",
+							"  while (nums.length < count) {\r",
+							"    const n = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+							"    if (!nums.includes(n)) nums.push(n);\r",
+							"  }\r",
+							"  return nums;\r",
+							"}\r",
+							"\r",
+							"const baseIds = getRandomUniqueNumbers(1, 5, Math.floor(Math.random() * 2) + 2);\r",
+							"const adicionaisIds = getRandomUniqueNumbers(6, 8, Math.floor(Math.random() * 3)); // até 2 adicionais\r",
+							"\r",
+							"pm.environment.set(\"ingredientesBaseIds\", JSON.stringify(baseIds));\r",
+							"pm.environment.set(\"ingredientesAdicionaisIds\", JSON.stringify(adicionaisIds));\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status da resposta é 201 (Created)\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Tempo de resposta é inferior a 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Resposta corresponde ao schema esperado\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.all.keys('id', 'nome', 'usuarioId', 'status', 'valor', 'criadoEm', 'atualizadoEm', 'ingredientes');\r",
+							"    \r",
+							"    pm.expect(responseData.id).to.be.a('number');\r",
+							"    pm.expect(responseData.nome).to.be.a('string');\r",
+							"    pm.expect(responseData.usuarioId).to.be.a('number');\r",
+							"    pm.expect(responseData.status).to.be.a('string');\r",
+							"    pm.expect(responseData.valor).to.be.a('number');\r",
+							"    pm.expect(responseData.criadoEm).to.be.a('string');\r",
+							"    pm.expect(responseData.atualizadoEm).to.be.a('string');\r",
+							"\r",
+							"    pm.expect(responseData.ingredientes).to.be.an('array');\r",
+							"    responseData.ingredientes.forEach(function(ingrediente) {\r",
+							"        pm.expect(ingrediente).to.have.all.keys('tipo', 'pedidoId', 'ingredienteId', 'ingrediente');\r",
+							"        pm.expect(ingrediente.pedidoId).to.be.a('number');\r",
+							"        pm.expect(ingrediente.ingredienteId).to.be.a('number');\r",
+							"        \r",
+							"        pm.expect(ingrediente.ingrediente).to.have.all.keys('id', 'nome', 'tipo', 'valor', 'disponivel', 'ativo', 'criadoEm');\r",
+							"        pm.expect(ingrediente.ingrediente.id).to.be.a('number');\r",
+							"        pm.expect(ingrediente.ingrediente.nome).to.be.a('string');\r",
+							"        pm.expect(ingrediente.ingrediente.valor).to.be.a('number');\r",
+							"        pm.expect(ingrediente.ingrediente.disponivel).to.be.a('boolean');\r",
+							"        pm.expect(ingrediente.ingrediente.ativo).to.be.a('boolean');\r",
+							"        pm.expect(ingrediente.ingrediente.criadoEm).to.be.a('string');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"O array 'ingredientes' deve conter pelo menos um elemento\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.have.property('ingredientes')\r",
+							"       .that.is.an('array')\r",
+							"       .with.lengthOf.at.least(1, \"O array 'ingredientes' não deve estar vazio\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"ingredientesBaseIds\": {{ingredientesBaseIds}},\n  \"ingredientesAdicionaisIds\": {{ingredientesAdicionaisIds}}\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pedidos",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pedidos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ver histórico de pedidos",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status da resposta é 200 (OK)\", function () {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Tempo de resposta é inferior a 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Resposta corresponde ao formato esperado\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+							"\r",
+							"    responseData.forEach(function(pedido) {\r",
+							"        pm.expect(pedido).to.be.an('object').that.includes.keys('id', 'nome', 'usuarioId', 'status', 'valor', 'criadoEm', 'atualizadoEm', 'ingredientes');\r",
+							"        pm.expect(pedido.id).to.be.a('number');\r",
+							"        pm.expect(pedido.nome).to.be.a('string');\r",
+							"        pm.expect(pedido.usuarioId).to.be.a('number');\r",
+							"        pm.expect(pedido.status).to.be.a('string');\r",
+							"        pm.expect(pedido.valor).to.be.a('number');\r",
+							"        pm.expect(pedido.criadoEm).to.be.a('string');\r",
+							"        pm.expect(pedido.atualizadoEm).to.be.a('string');\r",
+							"\r",
+							"        pm.expect(pedido.ingredientes).to.be.an('array');\r",
+							"\r",
+							"        pedido.ingredientes.forEach(function(ingrediente) {\r",
+							"            pm.expect(ingrediente).to.be.an('object').that.includes.keys('tipo', 'pedidoId', 'ingredienteId', 'ingrediente');\r",
+							"            pm.expect(ingrediente.pedidoId).to.be.a('number');\r",
+							"            pm.expect(ingrediente.ingredienteId).to.be.a('number');\r",
+							"\r",
+							"            pm.expect(ingrediente.ingrediente).to.be.an('object').that.includes.keys('id', 'nome', 'tipo', 'valor', 'disponivel', 'ativo', 'criadoEm');\r",
+							"            pm.expect(ingrediente.ingrediente.id).to.be.a('number');\r",
+							"            pm.expect(ingrediente.ingrediente.nome).to.be.a('string');\r",
+							"            pm.expect(ingrediente.ingrediente.tipo).to.be.a('string');\r",
+							"            pm.expect(ingrediente.ingrediente.valor).to.be.a('number');\r",
+							"            pm.expect(ingrediente.ingrediente.disponivel).to.be.a('boolean');\r",
+							"            pm.expect(ingrediente.ingrediente.ativo).to.be.a('boolean');\r",
+							"            pm.expect(ingrediente.ingrediente.criadoEm).to.be.a('string');\r",
+							"        });\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Cada pedido possui 'nome' não vazio e 'status' válido\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+							"\r",
+							"    responseData.forEach(function(pedido) {\r",
+							"        pm.expect(pedido.nome).to.exist.and.to.have.lengthOf.at.least(1, \"O campo 'nome' não deve estar vazio\");\r",
+							"        pm.expect(pedido.status).to.exist.and.to.be.a('string').and.to.have.lengthOf.at.least(1, \"O campo 'status' não deve estar vazio\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Ingredientes é um array contendo objetos válidos\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData).to.be.an('array').that.is.not.empty;\r",
+							"\r",
+							"    responseData.forEach(pedido => {\r",
+							"        pm.expect(pedido.ingredientes).to.be.an('array');\r",
+							"\r",
+							"        pedido.ingredientes.forEach(ingrediente => {\r",
+							"            pm.expect(ingrediente).to.include.all.keys('tipo', 'pedidoId', 'ingredienteId', 'ingrediente');\r",
+							"            pm.expect(ingrediente.ingrediente).to.include.all.keys('id', 'nome', 'tipo', 'valor', 'disponivel', 'ativo', 'criadoEm');\r",
+							"            pm.expect(ingrediente.ingrediente.nome).to.be.a('string').that.is.not.empty;\r",
+							"            pm.expect(ingrediente.ingrediente.valor).to.be.a('number');\r",
+							"            pm.expect(ingrediente.ingrediente.disponivel).to.be.a('boolean');\r",
+							"            pm.expect(ingrediente.ingrediente.ativo).to.be.a('boolean');\r",
+							"        });\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/pedidos/historico",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pedidos",
+						"historico"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

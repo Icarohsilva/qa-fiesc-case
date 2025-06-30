@@ -1,0 +1,76 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model usuario {
+  id           Int      @id @default(autoincrement())
+  nome         String
+  email        String   @unique
+  senha        String
+  role         String   @default("CLIENTE")
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @updatedAt
+  pedidos      pedido[]
+
+  @@map("usuario")
+}
+
+model ingrediente {
+  id           Int       @id @default(autoincrement())
+  nome         String    @unique
+  tipo         String
+  valor        Float     @default(0)
+  disponivel   Boolean   @default(true)
+  ativo        Boolean   @default(true)
+  criadoEm     DateTime  @default(now())
+  pedidos      pedidoIngrediente[]
+  cafes        cafeIngrediente[]
+}
+
+model cafeClassico {
+  id           Int              @id @default(autoincrement())
+  nome         String           @unique
+  descricao    String?
+  ingredientes cafeIngrediente[]
+}
+
+model pedido {
+  id           Int                  @id @default(autoincrement())
+  nome         String               @default("Pedido Anônimo")
+  usuario      usuario              @relation(fields: [usuarioId], references: [id])
+  usuarioId    Int
+  status       String               @default("RECEBIDO")
+  valor        Float                @default(0.0)
+  criadoEm     DateTime             @default(now())
+  atualizadoEm DateTime             @updatedAt
+  ingredientes pedidoIngrediente[]
+}
+
+model pedidoIngrediente {
+  id             Int         @id @default(autoincrement())
+  pedido         pedido      @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  ingrediente    ingrediente @relation(fields: [ingredienteId], references: [id], onDelete: Cascade)
+  pedidoId       Int
+  ingredienteId  Int
+  tipo           TipoIngrediente
+}
+
+model cafeIngrediente {
+  cafeClassico   cafeClassico @relation(fields: [cafeClassicoId], references: [id], onDelete: Cascade)
+  ingrediente    ingrediente  @relation(fields: [ingredienteId], references: [id], onDelete: Cascade)
+  cafeClassicoId Int
+  ingredienteId  Int
+
+  @@id([cafeClassicoId, ingredienteId])
+}
+
+enum TipoIngrediente {
+  BASE
+  ADICIONAL
+}

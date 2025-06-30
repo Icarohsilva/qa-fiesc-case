@@ -1,0 +1,396 @@
+/* ======= RESET E BASE ======= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #f9f6f2;
+  color: #3e2f2f;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ======= LOGIN E REGISTRO ======= */
+.login-body, .registro-body, .reset-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.login-container, .registro-container, .reset-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+form input {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  margin: 12px 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+form button {
+  background-color: #5a3825;
+  color: #fff;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+form button:hover {
+  background-color: #7a4e30;
+}
+
+.link {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.link a {
+  color: #5a3825;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.link a:hover {
+  text-decoration: underline;
+}
+
+.erro {
+  margin-top: 10px;
+  color: red;
+  font-size: 14px;
+}
+
+/* ======= PEDIDO ======= */
+.pedido-body {
+  padding: 30px 20px;
+}
+
+.pedido-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.96);
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.pedido-container h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.descricao {
+  display: block;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.usuario-opcoes {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.usuario-logado {
+  font-weight: bold;
+  color: #5a3825;
+  padding: 10px 20px;
+  border-radius: 4px;
+  display: inline-block; 
+  transition: background-color 0.3s ease;
+}
+
+.usuario-logado:hover {
+  background-color: #e8d9c5; /* Cor ao passar o mouse */
+}
+
+.link-topo {
+  color: #5a3825;  /* Cor marrom café */
+  font-weight: 600;  /* Peso semi-bold para melhor legibilidade */
+  text-decoration: none;
+  font-family: 'Segoe UI', system-ui, sans-serif;  /* Fonte moderna */
+  padding: 8px 12px;  /* Espaçamento interno confortável */
+  border-radius: 4px;  /* Bordas levemente arredondadas */
+  transition: all 0.3s ease;  /* Transição suave para hover/focus */
+  display: inline-block;  /* Permite padding e transform */
+  position: relative;  /* Para o pseudo-elemento */
+}
+
+/* Efeito hover mais elaborado */
+.link-topo:hover {
+  color: #3a2418;  /* Tom mais escuro no hover */
+  text-decoration: none;  /* Removemos o underline padrão */
+  transform: translateY(-2px);  /* Efeito de levitar */
+}
+
+/* Efeito de sublinhado personalizado */
+.link-topo:hover::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+  height: 2px;
+  background-color: #8b5a2b;  /* Cor caramelo */
+  animation: underline-grow 0.3s ease forwards;
+}
+
+/* Efeito para estado ativo/foco */
+.link-topo:focus, 
+.link-topo:active {
+  outline: none;
+  background-color: #f0e6d2;  /* Fundo bege claro */
+}
+
+/* Animação do sublinhado */
+@keyframes underline-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ======= LISTA DE INGREDIENTES ======= */
+#listaBase, #listaAdicional {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.item {
+  padding: 10px 16px;
+  border: 2px solid #b38867;
+  border-radius: 8px;
+  background-color: #f9f6f2;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.item:hover {
+  background-color: #e7e0da;
+}
+
+.item.selecionado {
+  background-color: #d1bfa8;
+  font-weight: bold;
+}
+
+/* ======= BOTÕES ======= */
+.botoes-acao {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-principal, .btn-secundario {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.btn-principal {
+  background-color: #5a3825;
+  color: #fff;
+}
+
+.btn-principal:hover {
+  background-color: #7a4e30;
+}
+
+.btn-secundario {
+  background-color: #ddd;
+  color: #333;
+}
+
+.btn-secundario:hover {
+  background-color: #bbb;
+}
+
+/* ======= MODAIS ======= */
+.modal, .modal-resumo {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-status{
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s ease;
+}
+
+.btn-status {
+  background-color: #5a3825;
+  color: #fff;
+}
+
+.btn-status:hover {
+  background-color: #7a4e30;
+}
+
+
+/* ======= OVERLAY SUCESSO ======= */
+.overlay-sucesso {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.85);
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+}
+
+.sucesso-box {
+  background: #fff;
+  padding: 40px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.emoji {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 4px solid #5a3825;
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  margin: 15px auto 0;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ======= ALERTA ERRO ======= */
+.alerta-erro {
+  margin-top: 15px;
+  padding: 10px;
+  background: #f9e2e2;
+  border-left: 5px solid #c00;
+  color: #600;
+  border-radius: 6px;
+}
+
+/* ======= SUGESTÕES DE CAFÉS ======= */
+.sugestoes-cafes {
+  margin: 25px 0;
+}
+
+.card-cafes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+}
+
+.cafe-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 160px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: 0.3s;
+}
+
+.cafe-card:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+.cafe-card img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+}
+
+.cafe-card h4 {
+  margin: 10px;
+  font-size: 16px;
+}
+
+.cafe-card p {
+  margin: 0 10px 10px;
+  font-size: 13px;
+  color: #666;
+}
+
+/* FUNDO ESPECÍFICO POR TELA */
+.login-body, .registro-body, .pedido-body, .historico-body {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.login-body {
+  background-image: url('../public/img/bg-login.jpg');
+}
+
+.registro-body {
+  background-image: url('../public/img/bg-registro.jpg');
+}
+
+.pedido-body {
+  background-image: url('../public/img/bg-pedido.jpg');
+}
+
+.historico-body {
+  background-image: url('../public/img/bg-historico.jpg');
+}

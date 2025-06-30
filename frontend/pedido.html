@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Montar Pedido - Cafeteria</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="pedido-body">
+  <div class="pedido-wrapper">
+    <div class="pedido-container">
+      <div class="cabecalho-pedido">
+        <div class="usuario-opcoes">
+          <span class="usuario-logado" id="usuarioNome"></span>
+          <a href="historico.html" class="link-topo">Histórico</a>
+          <a href="#" id="logout" class="link-topo">Sair</a>
+        </div>
+      </div>
+
+      <h1>Monte seu café ☕</h1>
+      <span class="descricao">Escolha os ingredientes base para montar seu café.</span>
+
+      <!-- Sugestões -->
+      <section class="sugestoes-cafes">
+        <h2>Ideias de Cafés</h2>
+        <p>Confira sugestões de combinações clássicas e criativas para inspirar seu pedido:</p>
+        <div class="card-cafes" id="sugestoesCafes"></div>
+      </section>
+
+      <!-- Ingredientes base -->
+      <div id="ingredientes-base">
+        <h3>Ingredientes base</h3>
+        <div id="listaBase"></div>
+        <div class="botoes-acao">
+          <button class="btn-secundario" onclick="window.location.reload()">Limpar Seleção</button>
+          <button class="btn-principal" id="btnMontar">Montar Café</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Alerta de erro -->
+  <div id="alerta" class="alerta-erro" style="display: none;">
+    ⚠️ Selecione ao menos 1 ingrediente base.
+  </div>
+
+  <!-- Modal 1: escolha de adicionais -->
+  <div id="modal-confirmacao" class="modal">
+    <div class="modal-content">
+      <h2>Escolha adicionais (máx 2)</h2>
+      <div id="listaAdicional"></div>
+      <div class="modal-buttons">
+        <button class="btn-secundario" id="alterarPedido">Alterar base</button>
+        <button class="btn-principal" id="confirmarAdicionais">Confirmar adicionais</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: resumo do pedido -->
+  <div id="modal-resumo" class="modal-resumo">
+    <div class="modal-content">
+      <h2>Confirmar Pedido?</h2>
+      <p id="infoCafe"></p>
+      <p id="infoIngredientes"></p>
+      <div class="modal-buttons">
+        <button class="btn-secundario" id="voltarAdicionais">Voltar</button>
+        <button class="btn-principal" id="confirmarPedido">Confirmar Pedido</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay de sucesso -->
+  <div id="overlay-sucesso" class="overlay-sucesso" style="display: none;">
+    <div class="sucesso-box">
+      <div class="emoji">🎉</div>
+      <p>Pedido feito com sucesso!</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/pages/pedido.js"></script>
+  <script>
+    const saboresClassicos = [
+      { nome: 'Macchiato', descricao: 'Espresso com leite e espuma', ingredientes: ['Espresso', 'Leite', 'Espuma'] },
+      { nome: 'Mocha', descricao: 'Espresso com leite e chocolate', ingredientes: ['Espresso', 'Leite', 'Chocolate'] },
+      { nome: 'Latte', descricao: 'Espresso com leite', ingredientes: ['Espresso', 'Leite'] }
+    ];
+
+    const sugestoesContainer = document.getElementById('sugestoesCafes');
+
+    saboresClassicos.forEach(cafe => {
+      const card = document.createElement('div');
+      card.className = 'cafe-card';
+      card.innerHTML = `
+        <img src="./public/img/${cafe.nome.toLowerCase()}.jpg" alt="${cafe.nome}">
+        <h4>${cafe.nome}</h4>
+        <p>${cafe.descricao}</p>
+      `;
+      card.addEventListener('click', () => {
+        const todosItens = document.querySelectorAll('.item');
+        todosItens.forEach(item => item.classList.remove('selecionado'));
+        cafe.ingredientes.forEach(nome => {
+          const item = [...todosItens].find(i => i.textContent === nome);
+          if (item) item.classList.add('selecionado');
+        });
+      });
+      sugestoesContainer.appendChild(card);
+    });
+  </script>
+</body>
+</html>
